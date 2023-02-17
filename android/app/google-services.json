@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "698075238579",
+    "project_id": "asp-final-a7e06",
+    "storage_bucket": "asp-final-a7e06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698075238579:android:aea6f02e83d8aa21d420c6",
+        "android_client_info": {
+          "package_name": "com.example.asp_base"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698075238579-vngs057jsde153d2pa1duo5q94nsj1dr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.asp_base",
+            "certificate_hash": "e9f24b6bc5746877ee4d2cd4431783f280107599"
+          }
+        },
+        {
+          "client_id": "698075238579-06s976sg0ikg255oufbha4dpoa0a7sh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfM_XxclYMJJYqUq9ZdjHDdErs7KJz2dI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698075238579-06s976sg0ikg255oufbha4dpoa0a7sh5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
