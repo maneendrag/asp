@@ -1,5 +1,6 @@
 import 'package:asp_base/_app/app.locator.dart';
 import 'package:asp_base/_app/enums/app_enums.dart';
+import 'package:asp_base/_services/size_config_service.dart';
 import 'package:asp_base/screen/home/home_screen.dart';
 import 'package:asp_base/screen/login/login_view_model.dart';
 import 'package:asp_base/screen/login/screens/login_screen.dart';
@@ -12,6 +13,7 @@ import 'signUpScreen.dart';
 class LandingScreen extends StatelessWidget {
 
   final NavigationService navigationService = locator<NavigationService>();
+  final SizeConfigService sizeConfigService = locator<SizeConfigService>();
 
   LandingScreen({super.key});
 
@@ -27,39 +29,52 @@ class LandingScreen extends StatelessWidget {
               return const SignUpScreen();
             case LoginScreenView.landingScreen:
               return Scaffold(
-                body: Container(
-                  color: Colors.red,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: ()=> model.navigateToLoginScreen(),
-                        child: Container(
-                          width: 125,
-                          height: 75,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(28), color: Colors.teal),
-                          child: const Center(child: Text("Login"),),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(height: 10,),
+                    Image.asset(
+                      "assets/logo.png",
+                      height: sizeConfigService.heightMultiplier * 25,
+                      width: sizeConfigService.heightMultiplier * 28,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: ()=> model.navigateToLoginScreen(),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 65, vertical: 12),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28), color: const Color(0xff0F4C75)),
+                                child: const Center(child: Text("Login", style: TextStyle(color: Color(0xffBBE1FA)),),),
+                              ),
+                            ),
+
+                            const SizedBox(width: 18,),
+
+                            GestureDetector(
+                              onTap: ()=> model.navigateToSignUpScreen(),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 65, vertical: 12),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28), color: Color(0xff0F4C75)),
+                                child: const Center(child: Text("Sign UP", style: TextStyle(color: Color(0xffBBE1FA)),),),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 65,),
-                      GestureDetector(
-                        onTap: ()=> model.navigateToSignUpScreen(),
-                        child: Container(
-                          height: 75,
-                          width: 125,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(28), color: Colors.teal),
-                          child: const Center(child: Text("Sign Up"),),
-                        ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(height: 45,)
+                      ],
+                    ),
+                  ],
                 ),
               );
             case LoginScreenView.loginScreen:
-              return const LoginScreen();
+              return LoginScreen();
             case LoginScreenView.homeScreen:
               return const HomeScreen();
           }

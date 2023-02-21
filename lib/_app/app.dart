@@ -1,4 +1,5 @@
 
+import 'package:asp_base/_services/size_config_service.dart';
 import 'package:asp_base/screen/login/screens/landing_screen.dart';
 import 'package:asp_base/screen/login/screens/login_screen.dart';
 import 'package:asp_base/screen/login/screens/signUpScreen.dart';
@@ -27,6 +28,7 @@ MaterialRoute(page: SignUpScreen),
   LazySingleton(classType: NavigationService),
   LazySingleton(classType: DialogService),
   LazySingleton(classType: BottomSheetService),
+  LazySingleton(classType: SizeConfigService),
 
 ]
     ,logger: StackedLogger())class Appetup {}

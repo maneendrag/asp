@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-enum HiveBox { AppLevelModel }
+enum HiveBox { DataModel }
 
 extension HiveBoxEx on HiveBox {
   String get inString => describeEnum(this);

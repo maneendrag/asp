@@ -107,7 +107,7 @@ class HttpService {
   final ConnectivityService _connection = locator<ConnectivityService>();
   HasuraConnect _createHasuraClient() {
     return HasuraConnect(
-      'https://efc-nc.hasura.app/v1/graphql',
+      'https://asp-mobile.hasura.app/v1/graphql',
       interceptors: [HasuraJwtTokenInterceptor()],
     );
   }
@@ -219,37 +219,37 @@ class HttpService {
   //   }
   // }
   //
-  // Future<Either<dynamic, HasuraFailure>> mutation(String document,
-  //     {Map<String, dynamic> variables = const {},
-  //       bool showLoading = false}) async {
-  //   try {
-  //     if (await _connection.status == ConnectivityResult.none) {
-  //       return Right(HasuraFailure(message: "No interner"));
-  //     }
-  //     _hasuraConnect.isConnected;
-  //     final dynamic mutationResponseData =
-  //     await _hasuraConnect.mutation(document, variables: variables);
-  //     return Left(mutationResponseData['data']);
-  //   } on HasuraRequestError catch (error) {
-  //     print('ERROR => Invalid Query => ${error.message}');
-  //     return Right(HasuraFailure(message: "Invalid Query"));
-  //   } on ConnectionError catch (error) {
-  //     print('ERROR => Connection Failed => ${error.message}}');
-  //     return Right(HasuraFailure(message: error.message, error: error));
-  //   } on InvalidRequestError catch (error) {
-  //     print('ERROR => Invalid Request => $error}');
-  //     return Right(HasuraFailure(message: "Invalid Request"));
-  //   } on InterceptorError catch (error) {
-  //     print('ERROR => Interceptor Error => $error}');
-  //     return Right(HasuraFailure(message: "Intercepter Error"));
-  //   } on DatasourceError catch (error) {
-  //     print('ERROR => DataSource Error => $error}');
-  //     return Right(HasuraFailure(message: "Data error"));
-  //   } catch (error) {
-  //     print('ERROR => Unknown Error => $error}');
-  //     return Right(HasuraFailure(message: "Somethings wrong"));
-  //   }
-  // }
+  Future<Either<dynamic, HasuraFailure>> mutation(String document,
+      {Map<String, dynamic> variables = const {},
+        bool showLoading = false}) async {
+    try {
+      if (await _connection.status == ConnectivityResult.none) {
+        return Right(HasuraFailure(message: "No interner"));
+      }
+      _hasuraConnect.isConnected;
+      final dynamic mutationResponseData =
+      await _hasuraConnect.mutation(document, variables: variables);
+      return Left(mutationResponseData['data']);
+    } on HasuraRequestError catch (error) {
+      print('ERROR => Invalid Query => ${error.message}');
+      return Right(HasuraFailure(message: "Invalid Query"));
+    } on ConnectionError catch (error) {
+      print('ERROR => Connection Failed => ${error.message}}');
+      return Right(HasuraFailure(message: error.message, error: error));
+    } on InvalidRequestError catch (error) {
+      print('ERROR => Invalid Request => $error}');
+      return Right(HasuraFailure(message: "Invalid Request"));
+    } on InterceptorError catch (error) {
+      print('ERROR => Interceptor Error => $error}');
+      return Right(HasuraFailure(message: "Intercepter Error"));
+    } on DatasourceError catch (error) {
+      print('ERROR => DataSource Error => $error}');
+      return Right(HasuraFailure(message: "Data error"));
+    } catch (error) {
+      print('ERROR => Unknown Error => $error}');
+      return Right(HasuraFailure(message: "Somethings wrong"));
+    }
+  }
 }
 
 class HasuraJwtTokenInterceptor extends Interceptor {
@@ -269,10 +269,10 @@ class HasuraJwtTokenInterceptor extends Interceptor {
 
   @override
   Future<Request> onRequest(Request request, HasuraConnect hasuraConnect) async {
-    final String userAccessHasuraJwtToken = "JaI0zOWISmhLSSD7ya6gL1CJhpCK1Ceav1qZgugTFBFlABV93jyIE5w4Km8b0Jc7";
+    final String userAccessHasuraJwtToken = "YGrweBRa09xXC2UMqP4gyiQdFpyPVwwdd3zCrv4bryZe4hLEBCiiAyxWIDw2jKEB";
 
     request.headers['content-type'] = 'application/json';
-    request.headers['x-hasura-admin-secret'] = 'JaI0zOWISmhLSSD7ya6gL1CJhpCK1Ceav1qZgugTFBFlABV93jyIE5w4Km8b0Jc7';
+    request.headers['x-hasura-admin-secret'] = 'YGrweBRa09xXC2UMqP4gyiQdFpyPVwwdd3zCrv4bryZe4hLEBCiiAyxWIDw2jKEB';
    request.headers['Authorization'] = '$userAccessHasuraJwtToken';
     // final String userAccessHasuraJwtToken = _appLevelModel.accessToken;
     // if (userAccessHasuraJwtToken != null) {

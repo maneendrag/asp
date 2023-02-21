@@ -68,8 +68,11 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i4.LoginScreen: (data) {
+      final args = data.getArgs<LoginScreenArguments>(
+        orElse: () => const LoginScreenArguments(),
+      );
       return MaterialPageRoute<dynamic>(
-        builder: (context) => const _i4.LoginScreen(),
+        builder: (context) => _i4.LoginScreen(key: args.key),
         settings: data,
       );
     },
@@ -89,6 +92,12 @@ class StackedRouter extends _i1.RouterBase {
 
 class LandingScreenArguments {
   const LandingScreenArguments({this.key});
+
+  final _i6.Key? key;
+}
+
+class LoginScreenArguments {
+  const LoginScreenArguments({this.key});
 
   final _i6.Key? key;
 }
@@ -124,14 +133,16 @@ extension NavigatorStateExtension on _i7.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToLoginScreen([
+  Future<dynamic> navigateToLoginScreen({
+    _i6.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -182,14 +193,16 @@ extension NavigatorStateExtension on _i7.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithLoginScreen([
+  Future<dynamic> replaceWithLoginScreen({
+    _i6.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.loginScreen,
+        arguments: LoginScreenArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

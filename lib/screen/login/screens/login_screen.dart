@@ -1,3 +1,4 @@
+import 'package:asp_base/_app/app.locator.dart';
 import 'package:asp_base/_app/enums/app_enums.dart';
 import 'package:asp_base/screen/home/home_screen.dart';
 import 'package:asp_base/screen/login/login_view_model.dart';
@@ -6,13 +7,16 @@ import 'package:asp_base/screen/login/screens/signUpScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+   LoginScreen({super.key});
 
+  NavigationService navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
+
 
         builder: (context, model, child) {
 

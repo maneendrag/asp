@@ -14,6 +14,7 @@ import 'package:stacked_services/src/snackbar/snackbar_service.dart';
 
 import '../_services/api_service.dart';
 import '../_services/connectivity_service.dart';
+import '../_services/size_config_service.dart';
 import '../_services/util_service.dart';
 
 final locator = StackedLocator.instance;
@@ -32,4 +33,5 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => BottomSheetService());
+  locator.registerLazySingleton(() => SizeConfigService());
 }
