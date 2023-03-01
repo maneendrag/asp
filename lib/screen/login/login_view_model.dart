@@ -1,4 +1,5 @@
 import 'package:asp_base/_app/app.locator.dart';
+import 'package:asp_base/_app/app.router.dart';
 import 'package:asp_base/_app/enums/app_enums.dart';
 import 'package:asp_base/_services/api_service.dart';
 import 'package:asp_base/_services/failure.dart';
@@ -6,12 +7,15 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
-
+import 'package:stacked_services/stacked_services.dart';
 import '../home/home_response.dart';
 
 class LoginViewModel extends BaseViewModel {
   LoginScreenView currentView = LoginScreenView.landingScreen;
   final HttpService _httpService = locator<HttpService>();
+  final SnackbarService snackbarService = locator<SnackbarService>();
+  final NavigationService navigationService = locator<NavigationService>();
+
 
   //SignUp text field controllers
   TextEditingController nameController = TextEditingController();
@@ -20,32 +24,36 @@ class LoginViewModel extends BaseViewModel {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  //
-  // bool validateEmail(email) {
-  //   print("Ema---> $email");
-  //   if (email != null && email.length > 0) {
-  //     Pattern pattern =
-  //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-  //     RegExp regex = RegExp(pattern.toString());
-  //     if (regex.hasMatch(email)) {
-  //       verifyEmailFromAPI(email);
-  //       print("validated");
-  //     } else {
-  //       print(" Not validated");
-  //     }
-  //     // verifyEmailFromAPI(email);
-  //     return regex.hasMatch(email);
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  //Login TextFields controller
+  TextEditingController loginEmailController = TextEditingController();
+  TextEditingController loginPasswordController = TextEditingController();
+
+  bool passwordError = false;
+  bool nameErrorText = false;
+
+
+  bool validateEmail(email) {
+    print("Ema---> $email");
+
+      Pattern pattern =
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+      RegExp regex = RegExp(pattern.toString());
+      if (regex.hasMatch(email)) {
+       return true;
+      } else {
+        return false;
+      }
+
+
+  }
 
   Future<User?> registerUsingEmailPassword() async {
     print("Entered registerUsingEmailPassword ny view model");
     setBusy(true);
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
-    try {
+
+        try {
       print("Entered try ny view model");
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: eMailController.text,
@@ -66,9 +74,10 @@ class LoginViewModel extends BaseViewModel {
             userMail: auth.currentUser!.email.toString(),
             userName: auth.currentUser!.displayName.toString(),
             userPhone: "9909089898");
+        navigationService.pushNamedAndRemoveUntil(Routes.homeScreen);
         setBusy(false);
       } else {
-        print("Login Success with out user data");
+       snackbarService.showSnackbar(message: "User Sign Up Failed");
         setBusy(false);
       }
 
@@ -86,19 +95,58 @@ class LoginViewModel extends BaseViewModel {
       setBusy(false);
     }
   }
+  printCheck(){
+    print("Check print in view model");
+  }
+
+  SignUpUserWithLogin(){
+    print("Entered in sign up in view model");
+    if(nameController.text.isEmpty){
+      snackbarService.showSnackbar(message: "Name Text field is empty");
+    }else if(eMailController.text.isEmpty || validateEmail(eMailController.text) == false){
+      snackbarService.showSnackbar(message: "Please check Email Field");
+    }else if(phoneNumberController.text.isEmpty || phoneNumberController.text.length > 10){
+      snackbarService.showSnackbar(message: "Please check Phone Number Field");
+    }else if(passwordController.text.isEmpty ){
+      snackbarService.showSnackbar(message: "Password Text field is empty");
+    }else if(confirmPasswordController.text.isEmpty ){
+      snackbarService.showSnackbar(message: "Confirm Password Text field is empty");
+    }else if(passwordController.text != confirmPasswordController.text){
+      snackbarService.showSnackbar(message: "Please check the password");
+    }
+    else{
+      print("Entered else");
+      registerUsingEmailPassword();
+    }
+  }
+
+  loginClicked(){
+    if(loginEmailController.text.isEmpty || validateEmail(loginEmailController.text) == false)
+      {
+        snackbarService.showSnackbar(message: "Check Email Text Field");
+      }else if(loginPasswordController.text.isEmpty){
+      snackbarService.showSnackbar(message: "Check Password Text Field");
+    }else{
+      loginWithFirebase();
+      snackbarService.showSnackbar(message: "Login Success");
+      navigationService.pushNamedAndRemoveUntil(Routes.homeScreen);
+
+    }
+  }
 
   Future<User?> loginWithFirebase() async {
-
+print("Entered login");
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     setBusy(true);
     try {
-
       final credential = await auth.signInWithEmailAndPassword(
-          email: "maneendra@g.com", password: "Maneendra@2021");
+          email: loginEmailController.text, password: loginPasswordController.text);
       user = credential.user;
      if( auth.currentUser != null) {
        print("User successful login ====> ${user!.email.toString()}");
+       print("User successful login ====> ${user!.displayName.toString()}");
+       navigationService.pushNamedAndRemoveUntil(Routes.homeScreen);
        setBusy(false);
      }
       else{
@@ -107,13 +155,18 @@ class LoginViewModel extends BaseViewModel {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+        snackbarService.showSnackbar(message: "user-not-found");
         print('No user found for that email.');
         setBusy(false);
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        snackbarService.showSnackbar(message: "Wrong password provided for that user");
+
         setBusy(false);
       }
       print("Something Went wrong!!!");
+      snackbarService.showSnackbar(message: "Something Went wrong!!!");
+
       setBusy(false);
     }
   }
@@ -232,20 +285,44 @@ mutation MyMutation($user_email: String!, $user_name: String!, $role: String!, $
   }
 
   changeView(LoginScreenView view) {
+    print("Change view tapped");
     currentView = view;
     notifyListeners();
   }
 
   navigateToLoginScreen() {
     changeView(LoginScreenView.loginScreen);
+    notifyListeners();
+  }
+
+  navigateToLandingScreen() {
+    print("NAv to lolandin screen");
+    changeView(LoginScreenView.landingScreen);
+    notifyListeners();
   }
 
   navigateToSignUpScreen() {
     print("tapped signup screen");
     changeView(LoginScreenView.signUpScreen);
+    notifyListeners();
   }
 
   navigateToHomeScreen() {
     changeView(LoginScreenView.homeScreen);
+    notifyListeners();
   }
+
+   /*=============================================================
+    <===================For Login Screen=========================>
+    =============================================================*/
+
+  bool obscureText = true;
+  playLoginObscure(){
+    print("Tapped Obscure");
+    obscureText =! obscureText;
+    notifyListeners();
+  }
+
+
+
 }

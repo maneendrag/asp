@@ -1,30 +1,137 @@
 import 'package:asp_base/_app/app.locator.dart';
-import 'package:asp_base/_app/enums/app_enums.dart';
-import 'package:asp_base/screen/home/home_screen.dart';
+import 'package:asp_base/_services/size_config_service.dart';
 import 'package:asp_base/screen/login/login_view_model.dart';
-import 'package:asp_base/screen/login/screens/landing_screen.dart';
-import 'package:asp_base/screen/login/screens/signUpScreen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
+import 'package:stacked_hooks/stacked_hooks.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class LoginScreen extends StatelessWidget {
-   LoginScreen({super.key});
-
-  NavigationService navigationService = locator<NavigationService>();
+class LoginScreen extends StackedHookView<LoginViewModel> {
+  SizeConfigService sizeConfigService = locator<SizeConfigService>();
   @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-
-
-        builder: (context, model, child) {
-
-          return Scaffold(body: Center(child: Text("login screen"),),);
-
-        },
-      viewModelBuilder: () => LoginViewModel(),
-    );
+  Widget builder(BuildContext context, LoginViewModel model) {
+    return model.isBusy
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.red,
+            ),
+          )
+        : Scaffold(
+            body: WillPopScope(
+                child: SafeArea(
+                  child: ListView(
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () =>
+                                      model.navigateToLandingScreen(),
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  )),
+                              const Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: Color(0xff3282B8),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 28),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: sizeConfigService.widthMultiplier * 8,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: TextField(
+                              controller: model.loginEmailController,
+                              keyboardType: TextInputType.name,
+                              style: const TextStyle(color: Color(0xffBBE1FA)),
+                              decoration: const InputDecoration(
+                                labelText: "Email",
+                                labelStyle: TextStyle(color: Color(0xff3282B8)),
+                                hintText: 'Enter Your Email',
+                                hintStyle: TextStyle(color: Color(0xff3282B8)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3,
+                                      color: Color(0xffBBE1FA)), //<-- SEE HERE
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: sizeConfigService.widthMultiplier * 4.2,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: TextField(
+                              obscureText: false,
+                              controller: model.loginPasswordController,
+                              keyboardType: TextInputType.name,
+                              style: const TextStyle(color: Color(0xffBBE1FA)),
+                              decoration: InputDecoration(
+                                labelText: "Password",
+                                labelStyle:
+                                    const TextStyle(color: Color(0xff3282B8)),
+                                hintText: 'Enter Your Password',
+                                hintStyle:
+                                    const TextStyle(color: Color(0xff3282B8)),
+                                suffixIcon: model.obscureText
+                                    ? IconButton(
+                                        onPressed: model.playLoginObscure,
+                                        icon: const Icon(Icons.remove_red_eye,
+                                            color: Colors.white))
+                                    : IconButton(
+                                        onPressed: model.playLoginObscure,
+                                        icon: Icon(
+                                            Icons.remove_moderator_outlined,
+                                            color: Colors.white)),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3,
+                                      color: Color(0xffBBE1FA)), //<-- SEE HERE
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: sizeConfigService.widthMultiplier * 16,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: GestureDetector(
+                              onTap: () {
+                                print("tappen on screen login");
+                                model.loginClicked();
+                              },
+                              // onTap: ()=> model.registerUsingEmailPassword(email: model.eMailController.text, password: model.passwordController.text),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 65, vertical: 12),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28),
+                                    color: Color(0xff0F4C75)),
+                                child: const Center(
+                                  child: Text(
+                                    "Login",
+                                    style: TextStyle(color: Color(0xffBBE1FA)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                onWillPop: () {
+                  return model.navigateToLandingScreen();
+                }),
+          );
   }
 }
 

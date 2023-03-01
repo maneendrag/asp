@@ -10,14 +10,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeScreenViewModel>.reactive(
         viewModelBuilder: ()=> HomeScreenViewModel(),
-        onViewModelReady: (model)=> model.fetchHomeData(),
+        onViewModelReady: (model)=> model.getECommerceResponse(),
         builder: (context, model, child){
           return model.isBusy == true ? Center(child: CircularProgressIndicator(color: Colors.yellow,))
               : Scaffold(
             body: Container(
                 color: Colors.teal,
                 child: Center(
-                  child: Text("${model.homeResponse?.users![0].apartmentNo}",
+                  child: Text("Home Screen",
                       style: TextStyle(fontSize: 42, color: Colors.white, fontWeight: FontWeight.bold)),
                 )),
           );

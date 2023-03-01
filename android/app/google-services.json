@@ -37,6 +37,13 @@
             {
               "client_id": "698075238579-06s976sg0ikg255oufbha4dpoa0a7sh5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "698075238579-43lbtoii5flk61jocnebqju3otngncob.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.aspBase"
+              }
             }
           ]
         }

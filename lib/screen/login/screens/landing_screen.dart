@@ -26,7 +26,7 @@ class LandingScreen extends StatelessWidget {
         builder: (context, model,child){
           switch(model.currentView){
             case LoginScreenView.signUpScreen:
-              return const SignUpScreen();
+              return SignUpScreen();
             case LoginScreenView.landingScreen:
               return Scaffold(
                 body: Column(

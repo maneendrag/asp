@@ -1,96 +1,11 @@
-// import 'package:efc_nc/_services/util_service.dart';
-// import 'package:hasura_connect/hasura_connect.dart' hide Response;
-// import 'package:dio/dio.dart';
-//
-// import '../_app/app.locator.dart';
-// import 'connectivity_service.dart';
-//
-// class HttpService {
-//
-//   ConnectivityService _connection = locator<ConnectivityService>();
-//   UtilsService _utils = locator<UtilsService>();
-//   HasuraConnect _hasuraConnect = HasuraConnect("https://efc-nc.hasura.app/v1/graphql",
-//       headers: {
-//     'x-hasura-admin-secret':"JaI0zOWISmhLSSD7ya6gL1CJhpCK1Ceav1qZgugTFBFlABV93jyIE5w4Km8b0Jc7"
-//   });
-//
-//   Future query(document, {variables, showLoading = true}) async {
-//     if (!await _connection.checkConnection()) return null;
-//     var response;
-//     if (showLoading) _utils.showLoadingDialog();
-//     bool sts = await _connection.checkConnection();
-//     if (!sts) return null;
-//     try {
-//       response = (await _hasuraConnect.query(document,
-//           variables: variables ?? {}))['data'];
-//     } catch (e, s) {
-//       print("$e , $s");
-//       print("hasura error $e");
-//       showHasuraError(e);
-//     }
-//     if (showLoading) _utils.closeLoadingDialog();
-//     return response;
-//   }
-//
-//
-//
-//   // Future mutation(document, variables, {showLoading = true}) async {
-//   //   var response;
-//   //   if (showLoading) _utils.showLoadingDialog();
-//   //   bool sts = await _connection.checkConnection();
-//   //   if (!sts) return null;
-//   //   try {
-//   //     response =
-//   //     await _hasuraConnect.mutation(document, variables: variables ?? {});
-//   //     response = response['data'];
-//   //   } catch (e, s) {
-//   //     print("$e , $s");
-//   //     showHasuraError(e);
-//   //   }
-//   //   if (showLoading) _utils.closeLoadingDialog();
-//   //   return response;
-//   // }
-//
-//   showHasuraError(e) {
-//     if (e.message.toString().contains("http")) {
-//       _utils.showErrorSnackBar(
-//           msg:
-//           "We regret the inconvience, something is wrong at our end. please try again after sometime.",
-//           title: "Server Error");
-//     } else if (e.message.toString().contains("SocketException")) {
-//       _utils.showErrorSnackBar(
-//           msg:
-//           'Seems to be slow internet connection, Please connect to a different source for better experience',
-//           title: "Slow Internet");
-//     } else
-//       _utils.showToast(e.message ?? "Server error");
-//   }
-//
-//   // Future<Snapshot<dynamic>> subscription(document,
-//   //     {variables, showLoading = true}) async {
-//   //   if (!await _connection.checkConnection()) return null;
-//   //   try {
-//   //     return await _hasuraConnect.subscription(document,
-//   //         variables: variables ?? {});
-//   //   } catch (e, s) {
-//   //     print("$e , $s");
-//   //   }
-//   //   return null;
-//   // }
-//
-//
-//   dispose() {
-//     _hasuraConnect.disconnect();
-//   }
-// }
-
-
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hasura_connect/hasura_connect.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../_app/app.locator.dart';
 import '../_services/connectivity_service.dart';
@@ -105,6 +20,7 @@ class HasuraFailure {
 class HttpService {
   HasuraConnect get _hasuraConnect => _createHasuraClient();
   final ConnectivityService _connection = locator<ConnectivityService>();
+  final SnackbarService snackbarService = locator<SnackbarService>();
   HasuraConnect _createHasuraClient() {
     return HasuraConnect(
       'https://asp-mobile.hasura.app/v1/graphql',
@@ -250,6 +166,12 @@ class HttpService {
       return Right(HasuraFailure(message: "Somethings wrong"));
     }
   }
+
+
+
+
+
+
 }
 
 class HasuraJwtTokenInterceptor extends Interceptor {
@@ -295,3 +217,4 @@ class HasuraJwtTokenInterceptor extends Interceptor {
   @override
   Future<void> onTryAgain(HasuraConnect connect) async {}
 }
+

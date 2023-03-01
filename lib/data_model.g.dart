@@ -12,7 +12,14 @@ class DataModelAdapter extends TypeAdapter<DataModel> {
 
   @override
   DataModel read(BinaryReader reader) {
-    return DataModel();
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return DataModel()
+      ..title = fields[0] as String?
+      ..description = fields[1] as String?
+      ..complete = fields[2] as bool?;
   }
 
   @override

@@ -1,13 +1,12 @@
 
 import 'package:asp_base/_services/size_config_service.dart';
+import 'package:asp_base/screen/home/home_screen.dart';
 import 'package:asp_base/screen/login/screens/landing_screen.dart';
 import 'package:asp_base/screen/login/screens/login_screen.dart';
 import 'package:asp_base/screen/login/screens/signUpScreen.dart';
 import 'package:asp_base/screen/splash_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-
 import '../_services/api_service.dart';
 import '../_services/connectivity_service.dart';
 import '../_services/util_service.dart';
@@ -19,6 +18,7 @@ MaterialRoute(initial: true,page: SplashScreen),
 MaterialRoute(page: LandingScreen),
 MaterialRoute(page: LoginScreen),
 MaterialRoute(page: SignUpScreen),
+MaterialRoute(page: HomeScreen),
 
 ], dependencies: [
   LazySingleton(classType: HttpService),

@@ -75,8 +75,25 @@ query GetUsers {
           message: 'Error in fetching subscription hm details'));
     }
   }
-  @override
-  initLogger() {
 
-  }
+  Future<Either<Failure, dynamic>> getECommerceResponse() async {
+
+    try {
+      dynamic dataResponse =
+      await _httpService.get("https://fakestoreapi.com/products",
+          headers: {});
+
+      print("In Ecommerce data resp in Home ======> $dataResponse");
+
+      // if(dataResponse['message'] == )
+      return Right(dataResponse);
+
+    } catch (e, s) {
+      print("entered error state");
+      return Left(Failure(message: e.toString(), errorMessage: s.toString()));
+    }
+  } // Signat
+  @override
+  initLogger() {}
+
 }
